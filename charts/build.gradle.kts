@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.detekt.gradle.plugin)
     id("maven-publish")
     id("signing")
+    alias(libs.plugins.compose.compiler)
 }
 
 group = getProperty("GROUP_ID")
@@ -49,9 +50,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.ktCompilerExt.get()
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -60,11 +58,12 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.material3)
 
-    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.compose.ui.tooling)
 }
 
 val sourcesJar by tasks.registering(Jar::class) {
